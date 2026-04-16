@@ -5913,6 +5913,48 @@ function InterlinkingView({
     }
   }, "Click status dropdown to update \xB7 Filter by type above")));
 }
+const TM_ROLE_COLORS = {superadmin:'#1a73e8',manager:'#0f9d58',user:'#f57c00'};
+const TM_ROLE_LABELS = {superadmin:'Super Admin',manager:'Manager',user:'User'};
+const TM_COLORS = ['#1a73e8','#0f9d58','#f57c00','#9c27b0','#e91e63','#795548','#00bcd4','#ff5722','#607d8b'];
+const TM_FormField = ({label, children}) => /*#__PURE__*/React.createElement('div',{className:'modal-field'},
+  /*#__PURE__*/React.createElement('label',null,label), children);
+const TM_UserForm = ({data, onChange, onSubmit, onCancel, submitLabel}) =>
+  /*#__PURE__*/React.createElement('div',{className:'modal-backdrop',onClick:e=>{if(e.target===e.currentTarget)onCancel();}},
+    /*#__PURE__*/React.createElement('div',{className:'modal-box'},
+      /*#__PURE__*/React.createElement('h3',null,submitLabel==='Add User' ? '👤 Add New Team Member' : '✏️ Edit Team Member'),
+      /*#__PURE__*/React.createElement('div',{className:'modal-grid'},
+        /*#__PURE__*/React.createElement(TM_FormField,{label:'Full Name *'},
+          /*#__PURE__*/React.createElement('input',{type:'text',value:data.name||'',placeholder:'e.g. Priya Sharma',
+            onChange:e=>onChange({...data,name:e.target.value,initials:e.target.value.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)})})),
+        /*#__PURE__*/React.createElement(TM_FormField,{label:'Email *'},
+          /*#__PURE__*/React.createElement('input',{type:'email',value:data.email||'',placeholder:'priya@indiaivf.in',
+            onChange:e=>onChange({...data,email:e.target.value})})
+        ),
+        /*#__PURE__*/React.createElement(TM_FormField,{label:'Role'},
+          /*#__PURE__*/React.createElement('select',{value:data.role||'user',onChange:e=>onChange({...data,role:e.target.value})},
+            Object.entries(TM_ROLE_LABELS).map(([v,l])=>/*#__PURE__*/React.createElement('option',{key:v,value:v},l))
+          )
+        ),
+        /*#__PURE__*/React.createElement(TM_FormField,{label:'Password *'},
+          /*#__PURE__*/React.createElement('input',{type:'text',value:data.password||'',placeholder:'IVF@Name2026',
+            onChange:e=>onChange({...data,password:e.target.value})})
+        ),
+        /*#__PURE__*/React.createElement(TM_FormField,{label:'Avatar Colour'},
+          /*#__PURE__*/React.createElement('div',{style:{display:'flex',gap:6,flexWrap:'wrap',paddingTop:4}},
+            TM_COLORS.map(c=>/*#__PURE__*/React.createElement('div',{
+              key:c, onClick:()=>onChange({...data,color:c}),
+              style:{width:22,height:22,borderRadius:'50%',background:c,cursor:'pointer',
+                border:data.color===c?'3px solid #202124':'3px solid transparent',boxSizing:'border-box'}
+            }))
+          )
+        )
+      ),
+      /*#__PURE__*/React.createElement('div',{className:'modal-btns'},
+        /*#__PURE__*/React.createElement('button',{className:'modal-cancel',onClick:onCancel},'Cancel'),
+        /*#__PURE__*/React.createElement('button',{className:'modal-submit',onClick:onSubmit},submitLabel)
+      )
+    )
+  );
 function TeamManagement({currentUser, onUsersChange}){
   const [users, setUsers] = React.useState(()=>JSON.parse(sessionStorage.getItem('ivf_custom_users')||'null')||USERS);
   const [showAdd, setShowAdd] = React.useState(false);
@@ -5921,9 +5963,6 @@ function TeamManagement({currentUser, onUsersChange}){
   const [ghStatus, setGhStatus] = React.useState('');
   const [saving, setSaving] = React.useState(false);
   const [form, setForm] = React.useState({name:'',email:'',role:'user',password:'',color:'#1a73e8'});
-  const ROLE_COLORS = {superadmin:'#1a73e8',manager:'#0f9d58',user:'#f57c00'};
-  const ROLE_LABELS = {superadmin:'Super Admin',manager:'Manager',user:'User'};
-  const COLORS = ['#1a73e8','#0f9d58','#f57c00','#9c27b0','#e91e63','#795548','#00bcd4','#ff5722','#607d8b'];
 
   const saveToSession = (u) => {
     sessionStorage.setItem('ivf_custom_users', JSON.stringify(u));
@@ -5987,47 +6026,6 @@ function TeamManagement({currentUser, onUsersChange}){
     setSaving(false);
   };
 
-  const FormField = ({label, children}) => /*#__PURE__*/React.createElement('div',{className:'modal-field'},
-    /*#__PURE__*/React.createElement('label',null,label), children);
-
-  const UserForm = ({data, onChange, onSubmit, onCancel, submitLabel}) =>
-    /*#__PURE__*/React.createElement('div',{className:'modal-backdrop',onClick:e=>{if(e.target===e.currentTarget)onCancel();}},
-      /*#__PURE__*/React.createElement('div',{className:'modal-box'},
-        /*#__PURE__*/React.createElement('h3',null,submitLabel==='Add User' ? '👤 Add New Team Member' : '✏️ Edit Team Member'),
-        /*#__PURE__*/React.createElement('div',{className:'modal-grid'},
-          /*#__PURE__*/React.createElement(FormField,{label:'Full Name *'},
-            /*#__PURE__*/React.createElement('input',{type:'text',value:data.name||'',placeholder:'e.g. Priya Sharma',
-              onChange:e=>onChange({...data,name:e.target.value,initials:e.target.value.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)})})),
-          /*#__PURE__*/React.createElement(FormField,{label:'Email *'},
-            /*#__PURE__*/React.createElement('input',{type:'email',value:data.email||'',placeholder:'priya@indiaivf.in',
-              onChange:e=>onChange({...data,email:e.target.value})})
-          ),
-          /*#__PURE__*/React.createElement(FormField,{label:'Role'},
-            /*#__PURE__*/React.createElement('select',{value:data.role||'user',onChange:e=>onChange({...data,role:e.target.value})},
-              Object.entries(ROLE_LABELS).map(([v,l])=>/*#__PURE__*/React.createElement('option',{key:v,value:v},l))
-            )
-          ),
-          /*#__PURE__*/React.createElement(FormField,{label:'Password *'},
-            /*#__PURE__*/React.createElement('input',{type:'text',value:data.password||'',placeholder:'IVF@Name2026',
-              onChange:e=>onChange({...data,password:e.target.value})})
-          ),
-          /*#__PURE__*/React.createElement(FormField,{label:'Avatar Colour'},
-            /*#__PURE__*/React.createElement('div',{style:{display:'flex',gap:6,flexWrap:'wrap',paddingTop:4}},
-              COLORS.map(c=>/*#__PURE__*/React.createElement('div',{
-                key:c, onClick:()=>onChange({...data,color:c}),
-                style:{width:22,height:22,borderRadius:'50%',background:c,cursor:'pointer',
-                  border:data.color===c?'3px solid #202124':'3px solid transparent',boxSizing:'border-box'}
-              }))
-            )
-          )
-        ),
-        /*#__PURE__*/React.createElement('div',{className:'modal-btns'},
-          /*#__PURE__*/React.createElement('button',{className:'modal-cancel',onClick:onCancel},'Cancel'),
-          /*#__PURE__*/React.createElement('button',{className:'modal-submit',onClick:onSubmit},submitLabel)
-        )
-      )
-    );
-
   return /*#__PURE__*/React.createElement('div',{className:'team-panel'},
     /* Header */
     /*#__PURE__*/React.createElement('div',{className:'team-header'},
@@ -6069,9 +6067,9 @@ function TeamManagement({currentUser, onUsersChange}){
           /*#__PURE__*/React.createElement('td',{style:{color:'#5f6368',fontSize:12}},u.email),
           /*#__PURE__*/React.createElement('td',null,
             /*#__PURE__*/React.createElement('span',{
-              style:{background:ROLE_COLORS[u.role]+'18',color:ROLE_COLORS[u.role],
+              style:{background:TM_ROLE_COLORS[u.role]+'18',color:TM_ROLE_COLORS[u.role],
                 padding:'2px 10px',borderRadius:10,fontSize:11,fontWeight:700}
-            },ROLE_LABELS[u.role]||u.role)
+            },TM_ROLE_LABELS[u.role]||u.role)
           ),
           /*#__PURE__*/React.createElement('td',null,
             /*#__PURE__*/React.createElement('span',{
@@ -6129,11 +6127,11 @@ function TeamManagement({currentUser, onUsersChange}){
     ),
 
     /* Modals */
-    showAdd && /*#__PURE__*/React.createElement(UserForm,{
+    showAdd && /*#__PURE__*/React.createElement(TM_UserForm,{
       data:form, onChange:setForm,
       onSubmit:addUser, onCancel:()=>setShowAdd(false),
       submitLabel:'Add User'}),
-    editUser && /*#__PURE__*/React.createElement(UserForm,{
+    editUser && /*#__PURE__*/React.createElement(TM_UserForm,{
       data:editUser, onChange:setEditUser,
       onSubmit:saveEdit, onCancel:()=>setEditUser(null),
       submitLabel:'Save Changes'})
