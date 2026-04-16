@@ -50,20 +50,20 @@ body{font-family:'Google Sans',Arial,sans-serif;background:#fff;height:100vh;ove
 .tab-add:hover{background:#e8eaed}
 /* ── GRID ── */
 .grid-wrap{height:100%;overflow:auto;position:relative}
-.gs-table{border-collapse:collapse;table-layout:fixed;font-size:12px}
-.gs-table th,.gs-table td{border-right:1px solid #e2e2e2;border-bottom:1px solid #e2e2e2;padding:0 4px;height:21px;line-height:21px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
-.col-alpha{background:#f8f9fa;color:#5f6368;text-align:center;font-weight:400;position:sticky;top:0;z-index:4;cursor:pointer;user-select:none;font-size:11px;padding:0}
+.gs-table{border-collapse:collapse;table-layout:auto;font-size:12px;width:100%}
+.gs-table th,.gs-table td{border-right:1px solid #e2e2e2;border-bottom:1px solid #e2e2e2;padding:5px 8px;line-height:1.5;white-space:normal;word-break:break-word;overflow-wrap:break-word;overflow:visible;vertical-align:top}
+.col-alpha{background:#f8f9fa;color:#5f6368;text-align:center;font-weight:400;position:sticky;top:0;z-index:4;cursor:pointer;user-select:none;font-size:11px;padding:0;white-space:nowrap;height:22px;line-height:22px;overflow:hidden;vertical-align:middle}
 .col-alpha:hover{background:#e8eaed}
-.row-num{background:#f8f9fa;color:#5f6368;text-align:center;font-weight:400;position:sticky;left:0;z-index:2;min-width:46px;width:46px;font-size:11px}
+.row-num{background:#f8f9fa;color:#5f6368;text-align:center;font-weight:400;position:sticky;left:0;z-index:2;min-width:46px;width:46px;font-size:11px;white-space:nowrap;vertical-align:top;padding-top:6px}
 .corner{position:sticky;top:0;left:0;z-index:5;background:#f8f9fa;border-right:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0}
-.col-head{background:#f8f9fa;color:#202124;font-weight:500;position:sticky;top:21px;z-index:3;cursor:pointer;font-size:12px;border-top:1px solid #e0e0e0}
+.col-head{background:#f8f9fa;color:#202124;font-weight:500;position:sticky;top:22px;z-index:3;cursor:pointer;font-size:12px;border-top:1px solid #e0e0e0;white-space:nowrap;height:24px;line-height:24px;overflow:hidden;vertical-align:middle;padding:2px 8px}
 .col-head:hover{background:#e8eaed}
-.rn-frozen{position:sticky;top:21px;left:0;z-index:4;background:#f8f9fa}
-.data-cell{cursor:default;background:#fff}
+.rn-frozen{position:sticky;top:22px;left:0;z-index:4;background:#f8f9fa}
+.data-cell{cursor:default;background:#fff;white-space:normal;word-break:break-word;overflow-wrap:break-word;min-width:60px}
 .data-cell:hover{background:#f6f8fc}
 .data-cell.sel{outline:2px solid #1a73e8;outline-offset:-2px;z-index:1;position:relative;background:#e8f0fe!important}
 .data-cell.editing{outline:2px solid #1a73e8;outline-offset:-2px;z-index:2;position:relative;padding:0}
-.cell-input{width:100%;height:100%;border:none;outline:none;padding:0 4px;font-size:12px;background:#fff;font-family:inherit;color:#202124}
+.cell-input{width:100%;min-height:30px;height:auto;border:none;outline:none;padding:4px 6px;font-size:12px;background:#fff;font-family:inherit;color:#202124;white-space:normal;word-break:break-word;resize:vertical}
 .row-fixed{background:#f0fdf4!important}
 .row-fixed .data-cell{background:#f0fdf4}
 .row-fixed .data-cell:hover{background:#dcfce7}
@@ -96,7 +96,7 @@ body{font-family:'Google Sans',Arial,sans-serif;background:#fff;height:100vh;ove
 .charts-grid{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:16px}
 .summary-table{width:100%;border-collapse:collapse;font-size:12px}
 .summary-table th{padding:6px 10px;text-align:left;background:#f8f9fa;border-bottom:2px solid #e0e0e0;color:#444;font-weight:600;white-space:nowrap}
-.summary-table td{padding:5px 10px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+.summary-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;vertical-align:top;white-space:normal;word-break:break-word;max-width:420px;line-height:1.5}
 .summary-table tr:hover td{background:#f8f9fa}
 /* ── CONTEXT MENU ── */
 .ctx-menu{position:fixed;background:#fff;border:1px solid #dadce0;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:1000;min-width:160px;padding:4px 0;font-size:13px}
@@ -2828,7 +2828,7 @@ const ISSUES_COLS = [{
 }, {
   key: "title",
   label: "Issue Title",
-  width: 260
+  width: 320
 }, {
   key: "source",
   label: "Source",
@@ -2836,15 +2836,15 @@ const ISSUES_COLS = [{
 }, {
   key: "detail",
   label: "Detail / Evidence",
-  width: 240
+  width: 380
 }, {
   key: "rootCause",
   label: "Root Cause",
-  width: 200
+  width: 320
 }, {
   key: "fix",
   label: "Suggested Fix",
-  width: 220
+  width: 360
 }, {
   key: "who",
   label: "Who Fixes",
@@ -2864,7 +2864,7 @@ const ISSUES_COLS = [{
 }, {
   key: "recovery",
   label: "Est. Recovery",
-  width: 180
+  width: 260
 }, {
   key: "status",
   label: "Status",
@@ -2897,7 +2897,7 @@ const ACTIONS_COLS = [{
 }, {
   key: "issue",
   label: "Issue / Task",
-  width: 250
+  width: 340
 }, {
   key: "assigned",
   label: "Assigned To",
@@ -2921,7 +2921,7 @@ const ACTIONS_COLS = [{
 }, {
   key: "notes",
   label: "Notes / Blocker",
-  width: 260
+  width: 420
 }, {
   key: "verified",
   label: "Verified?",
@@ -2938,7 +2938,7 @@ const ACTIONS_COLS = [{
 const GSC_COLS = [{
   key: "url",
   label: "URL / Page",
-  width: 340
+  width: 440
 }, {
   key: "clicks",
   label: "Clicks",
@@ -3439,8 +3439,7 @@ function SpreadsheetGrid({
         key: ci,
         className: "data-cell" + (isSel ? " sel" : "") + (isEd ? " editing" : ""),
         style: {
-          width: col.width,
-          maxWidth: col.width,
+          minWidth: col.width,
           background: isEd ? "#fff" : isSel ? "#e8f0fe" : isFixed ? "#f0fdf4" : "",
           color: typeof val === "number" && col.key !== "num" ? "#1a73e8" : "inherit"
         },
@@ -4952,15 +4951,15 @@ const INTERLINK_COLS = [{
 }, {
   key: "sourceName",
   label: "Source Page",
-  width: 240
+  width: 300
 }, {
   key: "targetName",
   label: "Target Page",
-  width: 220
+  width: 300
 }, {
   key: "anchorText",
   label: "Anchor Text",
-  width: 200
+  width: 260
 }, {
   key: "type",
   label: "Type",
@@ -4980,7 +4979,7 @@ const INTERLINK_COLS = [{
 }, {
   key: "notes",
   label: "Notes / Placement",
-  width: 260
+  width: 360
 }, {
   key: "assigned",
   label: "Assigned",
