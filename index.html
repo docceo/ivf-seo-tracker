@@ -132,7 +132,7 @@ body{font-family:'Google Sans',Arial,sans-serif;background:#fff;height:100vh;ove
 .user-menu-item:hover{background:#f8f9fa}
 .user-menu-item.logout{color:#c62828}
 /* ── FILTER BAR ── */
-.filter-bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#fff;border-bottom:1px solid #e8e8e8;flex-shrink:0}
+.filter-bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#f8f9fa;border-bottom:1px solid #e8e8e8;flex-shrink:0}
 .search-box{padding:4px 10px 4px 28px;border:1px solid #dadce0;border-radius:18px;font-size:12px;width:200px;outline:none;background:#f1f3f4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 8px center}
 .search-box:focus{border-color:#1a73e8;background:#fff}
 .flt-sel{padding:3px 8px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;cursor:pointer;color:#444;max-width:130px}
@@ -3531,7 +3531,7 @@ function SpreadsheetGrid({
     className: "flt-btn add",
     onClick: () => setShowAddModal(true),
     style:{background:"#1a73e8",color:"#fff",borderRadius:"6px",padding:"4px 12px",border:"none",cursor:"pointer",fontWeight:600,fontSize:12}
-  }, "+ Add Task"))), /*#__PURE__*/React.createElement("div", {
+  }, "+ Add Task")), /*#__PURE__*/React.createElement("div", {
     className: "grid-wrap",
     style: {
       flex: 1
@@ -3739,7 +3739,7 @@ function SpreadsheetGrid({
       if(r)deleteRow(r.id);
       setCtxMenu(null);
     }
-  },"🗑️ Delete Row")));
+  },"🗑️ Delete Row"))));
 }
 
 /* ═══════════════════════════════════════ DASHBOARD VIEW ════════════════════════════════ */
