@@ -5916,30 +5916,33 @@ function InterlinkingView({
 const TM_ROLE_COLORS = {superadmin:'#1a73e8',manager:'#0f9d58',user:'#f57c00'};
 const TM_ROLE_LABELS = {superadmin:'Super Admin',manager:'Manager',user:'User'};
 const TM_COLORS = ['#1a73e8','#0f9d58','#f57c00','#9c27b0','#e91e63','#795548','#00bcd4','#ff5722','#607d8b'];
-const TM_FormField = ({label, children}) => /*#__PURE__*/React.createElement('div',{className:'modal-field'},
-  /*#__PURE__*/React.createElement('label',null,label), children);
 const TM_UserForm = ({data, onChange, onSubmit, onCancel, submitLabel}) =>
   /*#__PURE__*/React.createElement('div',{className:'modal-backdrop',onClick:e=>{if(e.target===e.currentTarget)onCancel();}},
     /*#__PURE__*/React.createElement('div',{className:'modal-box'},
       /*#__PURE__*/React.createElement('h3',null,submitLabel==='Add User' ? '👤 Add New Team Member' : '✏️ Edit Team Member'),
       /*#__PURE__*/React.createElement('div',{className:'modal-grid'},
-        /*#__PURE__*/React.createElement(TM_FormField,{label:'Full Name *'},
+        /*#__PURE__*/React.createElement('div',{className:'modal-field'},
+          /*#__PURE__*/React.createElement('label',null,'Full Name *'),
           /*#__PURE__*/React.createElement('input',{type:'text',value:data.name||'',placeholder:'e.g. Priya Sharma',
             onChange:e=>onChange({...data,name:e.target.value,initials:e.target.value.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)})})),
-        /*#__PURE__*/React.createElement(TM_FormField,{label:'Email *'},
+        /*#__PURE__*/React.createElement('div',{className:'modal-field'},
+          /*#__PURE__*/React.createElement('label',null,'Email *'),
           /*#__PURE__*/React.createElement('input',{type:'email',value:data.email||'',placeholder:'priya@indiaivf.in',
             onChange:e=>onChange({...data,email:e.target.value})})
         ),
-        /*#__PURE__*/React.createElement(TM_FormField,{label:'Role'},
+        /*#__PURE__*/React.createElement('div',{className:'modal-field'},
+          /*#__PURE__*/React.createElement('label',null,'Role'),
           /*#__PURE__*/React.createElement('select',{value:data.role||'user',onChange:e=>onChange({...data,role:e.target.value})},
             Object.entries(TM_ROLE_LABELS).map(([v,l])=>/*#__PURE__*/React.createElement('option',{key:v,value:v},l))
           )
         ),
-        /*#__PURE__*/React.createElement(TM_FormField,{label:'Password *'},
+        /*#__PURE__*/React.createElement('div',{className:'modal-field'},
+          /*#__PURE__*/React.createElement('label',null,'Password *'),
           /*#__PURE__*/React.createElement('input',{type:'text',value:data.password||'',placeholder:'IVF@Name2026',
             onChange:e=>onChange({...data,password:e.target.value})})
         ),
-        /*#__PURE__*/React.createElement(TM_FormField,{label:'Avatar Colour'},
+        /*#__PURE__*/React.createElement('div',{className:'modal-field full'},
+          /*#__PURE__*/React.createElement('label',null,'Avatar Colour'),
           /*#__PURE__*/React.createElement('div',{style:{display:'flex',gap:6,flexWrap:'wrap',paddingTop:4}},
             TM_COLORS.map(c=>/*#__PURE__*/React.createElement('div',{
               key:c, onClick:()=>onChange({...data,color:c}),
