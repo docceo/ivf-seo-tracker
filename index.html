@@ -5972,13 +5972,32 @@ function TeamManagement({currentUser, onUsersChange}){
     if(onUsersChange) onUsersChange(u);
   };
 
+  const sendWelcomeEmail = (member) => {
+    const roleLabel = TM_ROLE_LABELS[member.role] || member.role;
+    const subject = encodeURIComponent('Welcome to IndiaIVF SEO Tracker — Your Access Details');
+    const body = encodeURIComponent(
+      'Hi ' + member.name + ',\n\n' +
+      'You have been added to the IndiaIVF SEO & Task Tracker. Here are your login details:\n\n' +
+      '🔗 Tracker URL: https://docceo.github.io/ivf-seo-tracker/\n' +
+      '📧 Email: ' + member.email + '\n' +
+      '🔑 Password: ' + member.password + '\n' +
+      '👤 Role: ' + roleLabel + '\n\n' +
+      'You will receive daily email digests for tasks assigned to you (due today & overdue).\n\n' +
+      'For any queries, contact ceo@indiaivf.in\n\n' +
+      'Regards,\nIndiaIVF SEO Team'
+    );
+    window.open('mailto:' + member.email + '?subject=' + subject + '&body=' + body);
+  };
+
   const addUser = () => {
     if(!form.name||!form.email||!form.password)return;
     const initials = form.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
     const maxId = users.reduce((m,u)=>Math.max(m,u.id),0);
-    const nu = [...users,{id:maxId+1,...form,initials}];
+    const newMember = {id:maxId+1,...form,initials};
+    const nu = [...users, newMember];
     setUsers(nu); saveToSession(nu); setShowAdd(false);
     setForm({name:'',email:'',role:'user',password:'',color:'#1a73e8'});
+    sendWelcomeEmail(newMember);
   };
 
   const saveEdit = () => {
