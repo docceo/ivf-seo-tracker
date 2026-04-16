@@ -69,6 +69,40 @@ body{font-family:'Google Sans',Arial,sans-serif;background:#fff;height:100vh;ove
 .row-fixed .data-cell:hover{background:#dcfce7}
 /* ── BADGES ── */
 .badge{display:inline-block;padding:1px 9px;border-radius:11px;font-size:11px;font-weight:500;white-space:nowrap;line-height:18px}
+/* ── ROLE BADGES ── */
+.role-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+/* ── ACTION BUTTONS ── */
+.act-btn{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.act-btn:hover{opacity:.82}
+.act-btn.done{background:#e6f4ea;color:#0f9d58}
+.act-btn.confirm{background:#e8f0fe;color:#1a73e8}
+.act-btn.delete{background:#fce8e6;color:#c62828}
+.act-btn.edit{background:#f3e8fd;color:#7b1fa2}
+.act-btn.add{background:#fff3e0;color:#e65100}
+/* ── DEADLINE CHIP ── */
+.dl-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;gap:3px}
+/* ── ADD ROW MODAL ── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center}
+.modal-box{background:#fff;border-radius:14px;padding:28px 32px;width:620px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-box h3{margin:0 0 18px;font-size:17px;color:#202124}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-field{display:flex;flex-direction:column;gap:4px}
+.modal-field.full{grid-column:1/-1}
+.modal-field label{font-size:11px;font-weight:600;color:#5f6368;text-transform:uppercase;letter-spacing:.4px}
+.modal-field input,.modal-field select,.modal-field textarea{padding:8px 12px;border:1.5px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;font-family:inherit;transition:border .15s;background:#fff}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:#1a73e8}
+.modal-field textarea{resize:vertical;min-height:70px}
+.modal-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.modal-btns button{padding:9px 22px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.modal-cancel{background:#f1f3f4;color:#5f6368}
+.modal-submit{background:#1a73e8;color:#fff}
+/* ── USER INFO IN TOPBAR ── */
+.user-chip{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:#f1f3f4;cursor:pointer;font-size:12px;font-weight:500;color:#3c4043;user-select:none;position:relative}
+.user-chip:hover{background:#e8eaed}
+.user-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.18);z-index:200;min-width:200px;padding:8px 0}
+.user-menu-item{padding:8px 16px;font-size:13px;color:#202124;cursor:pointer;display:flex;align-items:center;gap:8px}
+.user-menu-item:hover{background:#f8f9fa}
+.user-menu-item.logout{color:#c62828}
 /* ── FILTER BAR ── */
 .filter-bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#fff;border-bottom:1px solid #e8e8e8;flex-shrink:0}
 .search-box{padding:4px 10px 4px 28px;border:1px solid #dadce0;border-radius:18px;font-size:12px;width:200px;outline:none;background:#f1f3f4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 8px center}
@@ -109,68 +143,74 @@ body{font-family:'Google Sans',Arial,sans-serif;background:#fff;height:100vh;ove
 <div id="root"></div>
 <div id="err-display" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;padding:40px;font-family:monospace;font-size:13px;color:#c00;white-space:pre-wrap;overflow:auto;"></div>
 <script>
-/* PASSWORD GATE */
+/* ── USERS DATABASE ────────────────────────────────────────────────────────── */
+const USERS=[
+ {id:1,name:"Dr Somendra",email:"ceo@indiaivf.in",role:"superadmin",password:"IVF@Admin2026",initials:"DS",color:"#1a73e8"},
+ {id:2,name:"SEO Manager",email:"manager@indiaivf.in",role:"manager",password:"IVF@Mgr2026",initials:"SM",color:"#0f9d58"},
+ {id:3,name:"Developer",email:"dev@indiaivf.in",role:"user",password:"IVF@Dev2026",initials:"DV",color:"#f57c00"},
+ {id:4,name:"Content Team",email:"content@indiaivf.in",role:"user",password:"IVF@Content2026",initials:"CT",color:"#9c27b0"},
+ {id:5,name:"SEO Team",email:"seo@indiaivf.in",role:"user",password:"IVF@SEO2026",initials:"ST",color:"#e91e63"},
+ {id:6,name:"Marketing",email:"marketing@indiaivf.in",role:"user",password:"IVF@Mktg2026",initials:"MK",color:"#795548"},
+];
+window._getUser=function(){try{return JSON.parse(sessionStorage.getItem("ivf_user")||"null");}catch(e){return null;}};
+window._setUser=function(u){sessionStorage.setItem("ivf_user",JSON.stringify(u));};
+window._logout=function(){sessionStorage.removeItem("ivf_user");location.reload();};
+
+/* ── MULTI-USER LOGIN GATE ─────────────────────────────────────────────────── */
 (function(){
- const PASS_HASH="59b8e1d517af4df68f845c38c62fb81245c9cdcd";// SHA1 of "IVF@SEO2026"
- function sha1(str){
-  function rol(n,s){return(n<<s)|(n>>>(32-s));}
-  var msg=unescape(encodeURIComponent(str));
-  var bytes=[];for(var i=0;i<msg.length;i++)bytes.push(msg.charCodeAt(i));
-  bytes.push(0x80);
-  while(bytes.length%64!==56)bytes.push(0);
-  var len=msg.length*8;
-  for(var i=7;i>=0;i--){bytes.push(len&0xff);len>>=8;}
-  var w=[];
-  var h0=0x67452301,h1=0xEFCDAB89,h2=0x98BADCFE,h3=0x10325476,h4=0xC3D2E1F0;
-  for(var i=0;i<bytes.length;i+=64){
-   for(var j=0;j<16;j++)w[j]=(bytes[i+j*4]<<24)|(bytes[i+j*4+1]<<16)|(bytes[i+j*4+2]<<8)|bytes[i+j*4+3];
-   for(var j=16;j<80;j++)w[j]=rol(w[j-3]^w[j-8]^w[j-14]^w[j-16],1);
-   var a=h0,b=h1,c=h2,d=h3,e=h4;
-   for(var j=0;j<80;j++){
-    var f,k;
-    if(j<20){f=(b&c)|((~b)&d);k=0x5A827999;}
-    else if(j<40){f=b^c^d;k=0x6ED9EBA1;}
-    else if(j<60){f=(b&c)|(b&d)|(c&d);k=0x8F1BBCDC;}
-    else{f=b^c^d;k=0xCA62C1D6;}
-    var tmp=(rol(a,5)+f+e+k+w[j])>>>0;
-    e=d;d=c;c=rol(b,30);b=a;a=tmp;
-   }
-   h0=(h0+a)>>>0;h1=(h1+b)>>>0;h2=(h2+c)>>>0;h3=(h3+d)>>>0;h4=(h4+e)>>>0;
-  }
-  return[h0,h1,h2,h3,h4].map(function(n){return("0000000"+n.toString(16)).slice(-8);}).join("");
- }
- var key="ivf_tracker_auth";
- if(sessionStorage.getItem(key)==="1")return;
+ if(window._getUser())return;
  document.addEventListener("DOMContentLoaded",function(){
   var overlay=document.createElement("div");
   overlay.id="pw-gate";
   overlay.style.cssText="position:fixed;inset:0;background:#1a1a2e;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Arial,sans-serif;";
   overlay.innerHTML=`
-   <div style="background:#fff;border-radius:16px;padding:40px 44px;width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);">
-    <div style="font-size:40px;margin-bottom:12px;">📊</div>
-    <div style="font-size:20px;font-weight:700;color:#202124;margin-bottom:4px;">IndiaIVF SEO Tracker</div>
-    <div style="font-size:13px;color:#5f6368;margin-bottom:28px;">indiaivf.in · Private access only</div>
-    <input id="pw-input" type="password" placeholder="Enter access password" autocomplete="current-password"
-     style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;outline:none;margin-bottom:12px;box-sizing:border-box;transition:border .2s;"
+   <div style="background:#fff;border-radius:16px;padding:40px 44px;width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+    <div style="font-size:40px;margin-bottom:10px;">📊</div>
+    <div style="font-size:21px;font-weight:700;color:#202124;margin-bottom:3px;">IndiaIVF SEO Tracker</div>
+    <div style="font-size:13px;color:#5f6368;margin-bottom:26px;">indiaivf.in · Sign in to continue</div>
+    <input id="lg-email" type="email" placeholder="Email address" autocomplete="email"
+     style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;transition:border .2s;"
      onfocus="this.style.borderColor='#1a73e8'" onblur="this.style.borderColor='#e0e0e0'"/>
-    <div id="pw-err" style="color:#dc2626;font-size:12px;height:18px;margin-bottom:8px;"></div>
-    <button id="pw-btn" style="width:100%;padding:13px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">
-     Open Tracker →
+    <input id="lg-pass" type="password" placeholder="Password" autocomplete="current-password"
+     style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;transition:border .2s;"
+     onfocus="this.style.borderColor='#1a73e8'" onblur="this.style.borderColor='#e0e0e0'"/>
+    <div id="lg-err" style="color:#dc2626;font-size:12px;height:18px;margin-bottom:8px;"></div>
+    <button id="lg-btn" style="width:100%;padding:13px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s;">
+     Sign In →
     </button>
-    <div style="margin-top:20px;font-size:11px;color:#9aa0a6;">Authorised users only · India IVF Fertility</div>
+    <div style="margin-top:22px;padding-top:18px;border-top:1px solid #f0f0f0;">
+     <div style="font-size:11px;color:#9aa0a6;margin-bottom:10px;">Team accounts</div>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left;">
+      <div style="font-size:11px;color:#5f6368;background:#f8f9fa;padding:6px 10px;border-radius:6px;">
+       <b style="color:#1a73e8">SuperAdmin</b><br/>ceo@indiaivf.in
+      </div>
+      <div style="font-size:11px;color:#5f6368;background:#f8f9fa;padding:6px 10px;border-radius:6px;">
+       <b style="color:#0f9d58">Manager</b><br/>manager@indiaivf.in
+      </div>
+      <div style="font-size:11px;color:#5f6368;background:#f8f9fa;padding:6px 10px;border-radius:6px;">
+       <b style="color:#f57c00">Developer</b><br/>dev@indiaivf.in
+      </div>
+      <div style="font-size:11px;color:#5f6368;background:#f8f9fa;padding:6px 10px;border-radius:6px;">
+       <b style="color:#9c27b0">Content</b><br/>content@indiaivf.in
+      </div>
+     </div>
+    </div>
    </div>`;
   document.body.appendChild(overlay);
-  var inp=document.getElementById("pw-input");
-  var btn=document.getElementById("pw-btn");
-  var err=document.getElementById("pw-err");
+  var eml=document.getElementById("lg-email");
+  var pwd=document.getElementById("lg-pass");
+  var btn=document.getElementById("lg-btn");
+  var err=document.getElementById("lg-err");
   function tryLogin(){
-   var h=inp.value.trim();
-   if(h==="IVF@SEO2026"){sessionStorage.setItem(key,"1");overlay.remove();}
-   else{err.textContent="Incorrect password. Please try again.";inp.value="";inp.focus();inp.style.borderColor="#dc2626";setTimeout(function(){inp.style.borderColor="#e0e0e0";},1500);}
+   var e=eml.value.trim().toLowerCase();
+   var p=pwd.value;
+   var u=USERS.find(function(x){return x.email===e&&x.password===p;});
+   if(u){window._setUser(u);overlay.remove();}
+   else{err.textContent="Invalid email or password. Please try again.";pwd.value="";pwd.focus();}
   }
   btn.addEventListener("click",tryLogin);
-  inp.addEventListener("keydown",function(e){if(e.key==="Enter")tryLogin();});
-  inp.focus();
+  [eml,pwd].forEach(function(i){i.addEventListener("keydown",function(e){if(e.key==="Enter")tryLogin();});});
+  eml.focus();
  });
 })();
 /* REACT 18 */
@@ -2889,6 +2929,14 @@ const ISSUES_COLS = [{
   key: "curClicks",
   label: "Current Clicks/Wk",
   width: 130
+}, {
+  key: "deadline",
+  label: "Deadline",
+  width: 130
+}, {
+  key: "dlStatus",
+  label: "Status",
+  width: 120
 }];
 const ACTIONS_COLS = [{
   key: "num",
@@ -2934,6 +2982,14 @@ const ACTIONS_COLS = [{
   key: "fixedDate",
   label: "Fixed Date",
   width: 100
+}, {
+  key: "deadline",
+  label: "Deadline",
+  width: 130
+}, {
+  key: "dlStatus",
+  label: "Dl Status",
+  width: 120
 }];
 const GSC_COLS = [{
   key: "url",
@@ -3225,11 +3281,24 @@ function LineChart({
 
 /* ═══════════════════════════════════════ SPREADSHEET GRID ══════════════════════════════ */
 
+function deadlineStatus(dl, status){
+  if(!dl)return null;
+  const done=['Fixed','Done','Completed','Confirmed'];
+  if(done.includes(status))return{label:'✅ Done',color:'#0f9d58',bg:'#e6f4ea'};
+  const d=new Date(dl); if(isNaN(d))return null;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const diff=Math.ceil((d-today)/(1000*60*60*24));
+  if(diff<0)return{label:'🔴 Overdue',color:'#c62828',bg:'#fce8e6'};
+  if(diff<=3)return{label:'🟡 Due Soon',color:'#e37400',bg:'#fef9e7'};
+  return{label:'🟢 On Time',color:'#0f9d58',bg:'#e6f4ea'};
+}
 function SpreadsheetGrid({
   columns,
   data,
   onUpdate,
-  badgeCols
+  badgeCols,
+  currentUser,
+  gridType
 }) {
   const [rows, setRows] = useState(data);
   const [sel, setSel] = useState(null);
@@ -3242,6 +3311,10 @@ function SpreadsheetGrid({
   const [ctxMenu, setCtxMenu] = useState(null);
   const inputRef = useRef();
   const bc = badgeCols || ["status", "priority", "effort"];
+  const canEdit = currentUser && (currentUser.role==='manager'||currentUser.role==='superadmin');
+  const canConfirm = canEdit;
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newRow, setNewRow] = useState({});
   useEffect(() => {
     setRows(data);
   }, [data]);
@@ -3317,6 +3390,52 @@ function SpreadsheetGrid({
       ci
     });
   };
+  const markDone=(id,who)=>{
+    const today=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).replace(/ /g,"-");
+    const nr=rows.map(r=>r.id===id?{...r,status:"Pending Review",completedBy:who,completedDate:today}:r);
+    setRows(nr); if(onUpdate)onUpdate(nr);
+  };
+  const confirmDone=(id,who)=>{
+    const today=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).replace(/ /g,"-");
+    const nr=rows.map(r=>r.id===id?{...r,status:"Fixed",fixedDate:today,confirmedBy:who,doneDate:today}:r);
+    setRows(nr); if(onUpdate)onUpdate(nr);
+  };
+  const deleteRow=(id)=>{
+    if(!canEdit)return;
+    if(!window.confirm("Delete this task permanently?"))return;
+    const nr=rows.filter(r=>r.id!==id);
+    setRows(nr); if(onUpdate)onUpdate(nr);
+  };
+  const addNewRow=()=>{
+    if(!canEdit)return;
+    const maxId=rows.reduce((m,r)=>Math.max(m,r.id||0),0);
+    const today=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).replace(/ /g,"-");
+    const r={
+      id:maxId+1, num:maxId+1,
+      title:newRow.title||newRow.issue||"New Task",
+      issue:newRow.title||newRow.issue||"New Task",
+      source:newRow.source||"Manual",
+      detail:newRow.detail||"",
+      rootCause:newRow.rootCause||"",
+      fix:newRow.fix||"",
+      notes:newRow.notes||"",
+      who:newRow.who||currentUser?.name||"",
+      assigned:newRow.assigned||currentUser?.name||"",
+      effort:newRow.effort||"Medium",
+      priority:newRow.priority||"Medium",
+      impact:newRow.impact||"Medium",
+      status:"To Do",
+      deadline:newRow.deadline||newRow.targetDate||"",
+      targetDate:newRow.deadline||newRow.targetDate||"",
+      created:today,
+      fixedDate:"",
+      baseClicks:"",
+      curClicks:""
+    };
+    const nr=[...rows,r];
+    setRows(nr); if(onUpdate)onUpdate(nr);
+    setShowAddModal(false); setNewRow({});
+  };
   return /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -3378,9 +3497,11 @@ function SpreadsheetGrid({
       fontSize: 11,
       color: "#5f6368"
     }
-  }, filtered.length, " of ", rows.length, " rows"), /*#__PURE__*/React.createElement("button", {
-    className: "flt-btn add"
-  }, "+ Add Row")), /*#__PURE__*/React.createElement("div", {
+  }, filtered.length, " of ", rows.length, " rows"), canEdit && /*#__PURE__*/React.createElement("button", {
+    className: "flt-btn add",
+    onClick: () => setShowAddModal(true),
+    style:{background:"#1a73e8",color:"#fff",borderRadius:"6px",padding:"4px 12px",border:"none",cursor:"pointer",fontWeight:600,fontSize:12}
+  }, "+ Add Task"))), /*#__PURE__*/React.createElement("div", {
     className: "grid-wrap",
     style: {
       flex: 1
@@ -3419,7 +3540,7 @@ function SpreadsheetGrid({
       fontSize: 9,
       color: "#1a73e8"
     }
-  }, sortDir === "asc" ? "▲" : "▼"))))), /*#__PURE__*/React.createElement("tbody", null, filtered.map((row, ri) => {
+  }, sortDir === "asc" ? "▲" : "▼")), /*#__PURE__*/React.createElement("th",{className:"col-head",style:{width:150,top:21,textAlign:"center"}},"Actions")))), /*#__PURE__*/React.createElement("tbody", null, filtered.map((row, ri) => {
     const isFixed = row.status === "Fixed" || row.status === "Done";
     return /*#__PURE__*/React.createElement("tr", {
       key: row.id,
@@ -3469,11 +3590,49 @@ function SpreadsheetGrid({
         title: String(val || ""),
         style: {
           display: "block",
-          overflow: "hidden",
-          textOverflow: "ellipsis"
+          whiteSpace: "normal",
+          wordBreak: "break-word"
         }
       }, val));
-    }));
+    }), /*#__PURE__*/React.createElement("td", {
+      key: "actions",
+      className: "data-cell",
+      style: {minWidth:140, textAlign:"center", verticalAlign:"top", padding:"6px 4px"}
+    },
+      /* Deadline chip */
+      (()=>{
+        const dl=row.deadline||row.targetDate;
+        const ds=deadlineStatus(dl,row.status);
+        return dl && ds ? /*#__PURE__*/React.createElement("div",{
+          className:"dl-chip",
+          style:{background:ds.bg,color:ds.color,marginBottom:4,fontSize:10,justifyContent:"center"}
+        },ds.label) : null;
+      })(),
+      /* Mark Done button — all users */
+      row.status!=="Fixed" && row.status!=="Done" && row.status!=="Pending Review" &&
+      /*#__PURE__*/React.createElement("button",{
+        className:"act-btn done",
+        style:{display:"block",width:"100%",marginBottom:3},
+        onClick:()=>markDone(row.id,currentUser?.name||"User")
+      },"✓ Mark Done"),
+      /* Pending Review badge */
+      row.status==="Pending Review" && /*#__PURE__*/React.createElement("div",{
+        style:{background:"#fff3e0",color:"#e65100",borderRadius:5,padding:"3px 6px",fontSize:10,fontWeight:700,marginBottom:3}
+      },"⏳ Awaiting Approval"),
+      /* Confirm button — manager/superadmin only */
+      canConfirm && row.status==="Pending Review" &&
+      /*#__PURE__*/React.createElement("button",{
+        className:"act-btn confirm",
+        style:{display:"block",width:"100%",marginBottom:3},
+        onClick:()=>confirmDone(row.id,currentUser?.name||"Manager")
+      },"✅ Confirm Done"),
+      /* Delete button — manager/superadmin only */
+      canEdit && /*#__PURE__*/React.createElement("button",{
+        className:"act-btn delete",
+        style:{display:"block",width:"100%",marginTop:2},
+        onClick:()=>deleteRow(row.id)
+      },"🗑 Delete")
+    ));
   })))), /*#__PURE__*/React.createElement("div", {
     className: "status-bar"
   }, /*#__PURE__*/React.createElement("span", null, "\u2705 Fixed: ", /*#__PURE__*/React.createElement("strong", null, fixedCount)), /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCCB To Do: ", /*#__PURE__*/React.createElement("strong", null, todoCount)), /*#__PURE__*/React.createElement("span", null, "Total rows: ", /*#__PURE__*/React.createElement("strong", null, filtered.length)), /*#__PURE__*/React.createElement("div", {
@@ -3541,7 +3700,16 @@ function SpreadsheetGrid({
       }
       setCtxMenu(null);
     }
-  }, "\uD83D\uDD04 Mark In Progress")));
+  }, "\uD83D\uDD04 Mark In Progress"),
+  canEdit && /*#__PURE__*/React.createElement("div",{
+    className:"ctx-item",
+    style:{color:"#c62828"},
+    onClick:()=>{
+      const r=filtered[ctxMenu.ri];
+      if(r)deleteRow(r.id);
+      setCtxMenu(null);
+    }
+  },"🗑️ Delete Row")));
 }
 
 /* ═══════════════════════════════════════ DASHBOARD VIEW ════════════════════════════════ */
@@ -5722,10 +5890,48 @@ function InterlinkingView({
     }
   }, "Click status dropdown to update \xB7 Filter by type above")));
 }
+function UserChip({user}){
+  const [open,setOpen]=React.useState(false);
+  if(!user)return null;
+  const roleColors={superadmin:"#1a73e8",manager:"#0f9d58",user:"#f57c00"};
+  const roleLabels={superadmin:"Super Admin",manager:"Manager",user:"User"};
+  return /*#__PURE__*/React.createElement("div",{
+    className:"user-chip",
+    style:{position:"relative"},
+    onClick:()=>setOpen(o=>!o)
+  },
+    /*#__PURE__*/React.createElement("div",{
+      style:{width:28,height:28,borderRadius:"50%",background:user.color||roleColors[user.role]||"#1a73e8",
+        color:"#fff",fontWeight:700,fontSize:12,display:"flex",alignItems:"center",justifyContent:"center"}
+    },user.initials||(user.name||"U").substring(0,2).toUpperCase()),
+    /*#__PURE__*/React.createElement("div",null,
+      /*#__PURE__*/React.createElement("div",{style:{fontSize:12,fontWeight:600,color:"#202124",lineHeight:1.2}},user.name),
+      /*#__PURE__*/React.createElement("div",{
+        style:{fontSize:10,fontWeight:700,color:roleColors[user.role]||"#888",textTransform:"uppercase",letterSpacing:".4px"}
+      },roleLabels[user.role]||user.role)
+    ),
+    open && /*#__PURE__*/React.createElement("div",{className:"user-menu",onClick:e=>e.stopPropagation()},
+      /*#__PURE__*/React.createElement("div",{style:{padding:"10px 16px 8px",borderBottom:"1px solid #f0f0f0"}},
+        /*#__PURE__*/React.createElement("div",{style:{fontSize:13,fontWeight:600,color:"#202124"}},user.name),
+        /*#__PURE__*/React.createElement("div",{style:{fontSize:11,color:"#5f6368",marginTop:2}},user.email),
+        /*#__PURE__*/React.createElement("div",{
+          style:{display:"inline-block",marginTop:5,padding:"2px 8px",borderRadius:8,
+            fontSize:10,fontWeight:700,background:roleColors[user.role]+"22",color:roleColors[user.role]}
+        },roleLabels[user.role]||user.role)
+      ),
+      /*#__PURE__*/React.createElement("div",{
+        className:"user-menu-item logout",
+        onClick:()=>window._logout()
+      },"🚪 Sign Out")
+    )
+  );
+}
+
 function App() {
   const [active, setActive] = useState("dashboard");
   const [issueData, setIssueData] = useState(ISSUES_DATA);
   const [actionData, setActionData] = useState(ACTIONS_DATA);
+  const currentUser = React.useMemo(()=>window._getUser(),[]);
   const [cellInfo, setCellInfo] = useState({
     name: "A1",
     val: ""
@@ -5743,14 +5949,18 @@ function App() {
           columns: ISSUES_COLS,
           data: issueData,
           onUpdate: setIssueData,
-          badgeCols: ["status", "priority", "effort", "impact"]
+          badgeCols: ["status", "priority", "effort", "impact"],
+          currentUser: currentUser,
+          gridType: "issues"
         });
       case "actions":
         return /*#__PURE__*/React.createElement(SpreadsheetGrid, {
           columns: ACTIONS_COLS,
           data: actionData,
           onUpdate: setActionData,
-          badgeCols: ["status", "priority", "effort"]
+          badgeCols: ["status", "priority", "effort"],
+          currentUser: currentUser,
+          gridType: "actions"
         });
       case "gsc":
         return /*#__PURE__*/React.createElement(GSCView, null);
@@ -5785,10 +5995,7 @@ function App() {
   }), /*#__PURE__*/React.createElement("button", {
     className: "topbar-btn topbar-share",
     onClick: () => setShowShare(true)
-  }, "\uD83D\uDD17 Share"), /*#__PURE__*/React.createElement("div", {
-    className: "avatar",
-    title: "Dr Somendra"
-  }, "S")), /*#__PURE__*/React.createElement(MenuBar, null), /*#__PURE__*/React.createElement(ToolBar, null), /*#__PURE__*/React.createElement(FormulaBar, {
+  }, "\uD83D\uDD17 Share"), /*#__PURE__*/React.createElement(UserChip, {user: currentUser})), /*#__PURE__*/React.createElement(MenuBar, null), /*#__PURE__*/React.createElement(ToolBar, null), /*#__PURE__*/React.createElement(FormulaBar, {
     cellName: cellInfo.name,
     cellVal: cellInfo.val
   }), /*#__PURE__*/React.createElement("div", {
