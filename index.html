@@ -3570,7 +3570,7 @@ function SpreadsheetGrid({
       fontSize: 9,
       color: "#1a73e8"
     }
-  }, sortDir === "asc" ? "▲" : "▼")), /*#__PURE__*/React.createElement("th",{className:"col-head",style:{width:150,top:21,textAlign:"center"}},"Actions")))), /*#__PURE__*/React.createElement("tbody", null, filtered.map((row, ri) => {
+  }, sortDir === "asc" ? "▲" : "▼")), /*#__PURE__*/React.createElement("th",{className:"col-head",style:{width:150,top:21,textAlign:"center"}},"Actions"))), /*#__PURE__*/React.createElement("tbody", null, filtered.map((row, ri) => {
     const isFixed = row.status === "Fixed" || row.status === "Done";
     return /*#__PURE__*/React.createElement("tr", {
       key: row.id,
@@ -3739,7 +3739,7 @@ function SpreadsheetGrid({
       if(r)deleteRow(r.id);
       setCtxMenu(null);
     }
-  },"🗑️ Delete Row"));
+  },"🗑️ Delete Row")));
 }
 
 /* ═══════════════════════════════════════ DASHBOARD VIEW ════════════════════════════════ */
